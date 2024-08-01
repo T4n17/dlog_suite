@@ -3,9 +3,9 @@
 - Baby Step Giant Step Algorithm
 - Pollard's Rho Algorithm
 - Pohlig-Hellman Algorithm
-# Dependencies:
+## Dependencies:
 The Python script doesn't use any dependencies except the built-in math library.
-# Usage:
+## Usage:
 To use, simply import the script into a Python interpreter and use the functions.\
 Example:\
 `import dlog_suite`\
