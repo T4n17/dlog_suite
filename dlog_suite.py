@@ -1,11 +1,11 @@
 import math
 
-def GCD(a,b): #Function to compute the greatest common divisor between a and b
+def GCD(a,b): # Computes the greatest common divisor of two integers using Euclidean algorithm
     while b != 0:
         a, b = b, a % b
     return a
 
-def ElementOrder(x, p): #Function to compute the order of an element x in a group p
+def ElementOrder(x, p): # Calculates the multiplicative order of element x in the group modulo p using prime factorization
     n = GroupOrder(p)
     fact = PrimeFactorization(n)
     fact_set = list(set(fact))
@@ -18,13 +18,13 @@ def ElementOrder(x, p): #Function to compute the order of an element x in a grou
             t = t * fact_set[i]
     return t
 
-def isPrime(p): #Function to check if a number p is prime
+def isPrime(p): # Determines if a number p is prime by checking divisibility up to p-1
     for i in range(2, p-1):
         if p % i == 0:
             return False
         return True
     
-def GroupOrder(n): #Function to compute the order of a group n
+def GroupOrder(n): # Calculates the order of a multiplicative group modulo n using Euler's totient function
     if isPrime(n):
         return n-1
     fact = list(set(PrimeFactorization(n)))
@@ -33,7 +33,8 @@ def GroupOrder(n): #Function to compute the order of a group n
         res = res * (f-1)  
     return res
 
-def CRT(x, q, N): #Function to compute the remainder chinese theorem between a system of congruences x mod q, where N = q1*q2*q3*...qi
+def CRT(x, q, N): # Solves a system of linear congruences using Chinese Remainder Theorem
+                  # x: list of remainders, q: list of moduli, N: product of all moduli
     res = 0
     for i in range(len(x)):
         x_i = x[i]
@@ -43,7 +44,8 @@ def CRT(x, q, N): #Function to compute the remainder chinese theorem between a s
         res = res + (x_i * n_i * s)
     return res % N
 
-def BSGS(g, h, p): #Baby-Step Giant-Step Algorithm to compute discrete logarithm of h in base g (mod p)
+def BSGS(g, h, p): # Implements the Baby-Step Giant-Step algorithm for solving discrete logarithm
+                   # Finds x such that g^x ≡ h (mod p) in O(sqrt(p)) time complexity
     L1 = []
     L2 = []
     n = 1 + round(math.sqrt(GroupOrder(p)))
@@ -55,7 +57,8 @@ def BSGS(g, h, p): #Baby-Step Giant-Step Algorithm to compute discrete logarithm
                return (L1.index(e1)) + ((L2.index(e1)) * n)
     return -1
 
-def XGCD(a, b): #Function to compute the Extended Euclidean Algorithm between a and b
+def XGCD(a, b): # Implements Extended Euclidean Algorithm to find GCD(a,b) and coefficients x,y such that ax + by = GCD(a,b)
+                # Returns (gcd, x, y)
     if a == 0 : 
         return b,0,1
 
@@ -66,7 +69,8 @@ def XGCD(a, b): #Function to compute the Extended Euclidean Algorithm between a 
 
     return gcd,x,y 
 
-def PrimeFactorization(n): #Function to compute the prime factorization of n
+def PrimeFactorization(n): # Computes the prime factorization of n using trial division
+                          # Returns a list of prime factors in ascending order
     p = 2
     factors = []
     while p*p <= n:
@@ -78,7 +82,9 @@ def PrimeFactorization(n): #Function to compute the prime factorization of n
        factors.append(p)
     return factors
 
-def pollard_p(g,h,p): #Pollard Rho Algorithm to compute the discrete logarithm of h in base g (mod p)
+def pollard_p(g,h,p): # Implements Pollard's Rho algorithm for discrete logarithm
+                      # Finds x such that g^x ≡ h (mod p) using a random walk approach
+                      # More efficient than BSGS for certain group orders
     ord = ElementOrder(g,p)
     x = 1
     y = 1
@@ -124,7 +130,9 @@ def pollard_p(g,h,p): #Pollard Rho Algorithm to compute the discrete logarithm o
             return l
     return -1
 
-def pohlig_hellman(g, h, p): #Full Pohlig Hellman Algorithm to compute discrete logarithm of h in base g (mod p)
+def pohlig_hellman(g, h, p): # Implements the complete Pohlig-Hellman algorithm for discrete logarithm
+                            # Reduces the problem to smaller subgroups using Chinese Remainder Theorem
+                            # Optimal for groups with smooth order (factoring into small primes)
     ord = ElementOrder(g,p)
     f_order = PrimeFactorization(ord)
     x_list = []
